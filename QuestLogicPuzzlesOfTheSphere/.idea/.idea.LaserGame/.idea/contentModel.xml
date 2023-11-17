@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\MOHAX\AppData\Local\JetBrains\Rider2020.1\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\MOHAX\AppData\Local\JetBrains\Rider2020.1\resharper-host\Local\Transient\ReSharperHost\v201\SolutionCaches\_LaserGame.599653783.00" t="ExcludeRecursive" />
+    <e p="D:\Proj\Unity\Projects\LaserGame\LaserGame" t="IncludeRecursive">
+      <e p="Assembly-CSharp-Editor.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="3rdParty" t="Include">
+          <e p="AutoSave" t="Include">
+            <e p="Editor" t="Include">
+              <e p="AutoSaveExtension.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Art" t="Include">
+          <e p="Activators" t="Include">
+            <e p="CoreCrystal" t="Include" />
+            <e p="Gun" t="Include" />
+            <e p="Magnifier" t="Include" />
+            <e p="Portal" t="Include" />
+            <e p="Reflector" t="Include" />
+          </e>
+          <e p="Laser" t="Include">
+            <e p="Old" t="Include" />
+          </e>
+          <e p="Level" t="Include" />
+          <e p="Walls" t="Include">
+            <e p="Glass" t="Include" />
+          </e>
+        </e>
+        <e p="Configurations" t="Include">
+          <e p="Graphics" t="Include" />
+        </e>
+        <e p="Prefabs" t="Include" />
+        <e p="Scenes" t="Include">
+          <e p="SampleScene" t="Include" />
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="EditorExtensions" t="Include">
+            <e p="Range" t="Include">
+              <e p="RangeExAttribute.cs" t="Include" />
+              <e p="RangeExDrawer.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Old" t="Include">
+            <e p="CameraViewSwitcher.cs" t="Include" />
+            <e p="ColorChanger.cs" t="Include" />
+            <e p="Finish.cs" t="Include" />
+            <e p="IColorChanger.cs" t="Include" />
+            <e p="ILaserCreator.cs" t="Include" />
+            <e p="LaserAnimation.cs" t="Include" />
+            <e p="LaserCreator.cs" t="Include" />
+            <e p="LaserDataSO.cs" t="Include" />
+            <e p="LaserGun.cs" t="Include" />
+            <e p="LaserMagnifier.cs" t="Include" />
+            <e p="LaserOld.cs" t="Include" />
+            <e p="LaserReflector.cs" t="Include" />
+            <e p="LaserTeleporter.cs" t="Include" />
+            <e p="PlatformRotator.cs" t="Include" />
+            <e p="RotatePlatformWithUIButton.cs" t="Include" />
+          </e>
+          <e p="Runtime" t="Include">
+            <e p="CameraController.cs" t="Include" />
+            <e p="ILaserReceiver.cs" t="Include" />
+            <e p="Laser.cs" t="Include" />
+            <e p="LaserActivators" t="Include">
+              <e p="Activator.cs" t="Include" />
+              <e p="CoreCrystal.cs" t="Include" />
+              <e p="Divider.cs" t="Include" />
+              <e p="Gun.cs" t="Include" />
+              <e p="Reflector.cs" t="Include" />
+              <e p="Teleporter.cs" t="Include" />
+            </e>
+            <e p="Localisation" t="Include">
+              <e p="ButtonSwitchLanguage.cs" t="Include" />
+              <e p="LocalisationData.cs" t="Include" />
+              <e p="Localisator.cs" t="Include" />
+              <e p="LocalizedText.cs" t="Include" />
+            </e>
+            <e p="Managers" t="Include">
+              <e p="LaserContainer.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="StreamingAssets" t="Include">
+          <e p="Languages" t="Include">
+            <e p="en_US.json" t="Include" />
+            <e p="ru_RU.json" t="Include" />
+          </e>
+        </e>
+        <e p="Разработка.txt" t="Include" />
+      </e>
+      <e p="LaserGame.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\Bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
