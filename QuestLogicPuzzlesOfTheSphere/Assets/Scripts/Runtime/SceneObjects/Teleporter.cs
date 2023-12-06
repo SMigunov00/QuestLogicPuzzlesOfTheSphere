@@ -1,7 +1,9 @@
+using Runtime.Save;
+using Runtime.Services;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
+using Zenject;
 
 namespace Runtime.SceneObjects
 {
@@ -15,9 +17,26 @@ namespace Runtime.SceneObjects
 
         public bool IsActive { get; private set; }
 
-        public override Vector3 GetPointPosition()
+        private float _maxEnergy = 250f;
+        private Color _color = Color.white;
+        [Inject] private LevelSetup _levelSetup;
+
+        private void OnEnable()
         {
-            return _positionPoint.position;
+            Tweaker.OnChangeGlowPower += HandleChangeGlowPower;
+        }
+
+        private void OnDisable()
+        {
+            Tweaker.OnChangeGlowPower -= HandleChangeGlowPower;
+        }
+
+        private void Start()
+        {
+            GameSettingsData settingsData = JsonUtility.FromJson<GameSettingsData>(PlayerPrefs.GetString("SavedGameSettingsData"));
+            _maxEnergy = settingsData.MaxGlowPower;
+            _color = _levelSetup.LevelColor;
+            UpdateGlow();
         }
 
         public override void StopAtSelectedPoint(Player player)
@@ -32,23 +51,10 @@ namespace Runtime.SceneObjects
             }
         }
 
-        public SelectableObject GetFriend()
-        {
-            return _friend.gameObject.GetComponent<SelectableObject>();
-        }
-
-        public override List<Lane> GetDirections()
-        {
-            return _availableDestinations;
-        }
-        public override int GetCountFried()
-        {
-            return _availableDestinations.Count;
-        }
-        /*public override void RemoveSelectedObjectAtList(SelectableObject selectableObject)
-        {
-            _availableDestinations.Remove(selectableObject);
-        }*/
+        public override Vector3 GetPointPosition() => _positionPoint.position;
+        public SelectableObject GetFriend() => _friend.gameObject.GetComponent<SelectableObject>();
+        public override List<Lane> GetDirections() => _availableDestinations;
+        public override int GetCountFried() => _availableDestinations.Count;
 
         private Vector3 GetTeleportPoint() => _teleportPoint != null ? _teleportPoint.position : transform.position;
 
@@ -70,6 +76,7 @@ namespace Runtime.SceneObjects
                 yield return StartCoroutine(UdpateTeleportedEffect(element, -1));
             }
         }
+
         private IEnumerator UdpateTeleportedEffect(Renderer element, int m)
         {
             MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
@@ -105,5 +112,47 @@ namespace Runtime.SceneObjects
             element.material = defaultObjectMaterial;
         }
 
+
+        public void HandleChangeGlowPower(float newEnergy)
+        {
+            _maxEnergy = newEnergy;
+            UpdateGlow();
+        }
+
+        private void UpdateGlow()
+        {
+            UpdateGlowPower();
+            UpdateEmissionColor();
+        }
+
+        private float _glowPower;
+
+        private void UpdateGlowPower()
+        {
+            float glowPower = _maxEnergy / 100.0f;
+
+            float k = 1.442695f;
+            _glowPower = Mathf.Log(glowPower + 1) * k;
+        }
+        private void UpdateEmissionColor()
+        {
+            UpdateGlowPower();
+
+            Renderer[] elements = GetComponentsInChildren<Renderer>();
+            foreach (Renderer element in elements)
+            {
+                UpdateEmissionColor(element);
+            }
+        }
+
+        private void UpdateEmissionColor(Renderer element)
+        {
+            MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
+            element.GetPropertyBlock(propBlock);
+            propBlock.SetColor("_ColorOne", _color * _glowPower);
+            propBlock.SetColor("_ColorTwo", _color);
+            propBlock.SetColor("_EmissionColor", _color * _glowPower);
+            element.SetPropertyBlock(propBlock);
+        }
     }
 }

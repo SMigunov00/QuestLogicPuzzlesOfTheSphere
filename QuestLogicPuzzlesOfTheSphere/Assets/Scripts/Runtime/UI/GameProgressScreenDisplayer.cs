@@ -15,13 +15,15 @@ namespace Runtime.UI
         private StepReader _stepReader;
         private Timer _timer;
         private ItemPicker _itemPicker;
+        private LevelSetup _levelSetup;
 
         [Inject]
-        private void Constructor(StepReader stepReader, Timer timer, ItemPicker itemPicker)
+        private void Constructor(StepReader stepReader, Timer timer, ItemPicker itemPicker, LevelSetup levelSetup)
         {
             _stepReader = stepReader;
             _timer = timer;
             _itemPicker = itemPicker;
+            _levelSetup = levelSetup;
         }
 
         private void OnEnable()
@@ -29,6 +31,11 @@ namespace Runtime.UI
             _stepReader.OnStepsCount += UploadStepsCountOnScreenDisplay;
             _timer.OnConvertedTransitTime += UploadTransitTimeOnScreenDisplay;
             _itemPicker.OnObjectsRaisedScore += UploadRisedObjectsScoreOnScreenDisplay;
+        }
+
+        private void Start()
+        {
+            UploadRisedObjectsScoreOnScreenDisplay(0);
         }
 
         private void OnDisable()
@@ -44,15 +51,15 @@ namespace Runtime.UI
                 _transitTimeText.text = hours.ToString("00") + ":" + minutes.ToString("00") + ":" + seconds.ToString("00");
         }
 
-        private void UploadRisedObjectsScoreOnScreenDisplay(int risedObjectsScore)
+        private void UploadRisedObjectsScoreOnScreenDisplay(int currentNumberOfCollectedObjectsToGetAStar)
         {
             if (_risedObjectScoreText != null)
-                _risedObjectScoreText.text = risedObjectsScore.ToString();
+                _risedObjectScoreText.text = $":{currentNumberOfCollectedObjectsToGetAStar}|{_levelSetup.RequiredNumberOfCollectedObjectsToGetAStar}";
         }
-        private void UploadStepsCountOnScreenDisplay(int stepsCount)
+        private void UploadStepsCountOnScreenDisplay(int numberOfStepsUntilTheStarIsDeactivated, int numberOfStepsToLose)
         {
             if (_stepsCountText != null)
-                _stepsCountText.text = $"Ходы: {stepsCount}";
+                _stepsCountText.text = $"{numberOfStepsUntilTheStarIsDeactivated}|{numberOfStepsToLose}";
         }
     }
 }

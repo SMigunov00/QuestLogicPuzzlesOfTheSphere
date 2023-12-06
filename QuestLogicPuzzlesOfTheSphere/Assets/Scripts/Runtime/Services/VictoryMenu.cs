@@ -1,5 +1,6 @@
 ﻿using Runtime.Save;
 using Runtime.SceneObjects;
+using Runtime.Services.Pause;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +12,7 @@ namespace Runtime.Services
     {
         [SerializeField] private TextMeshProUGUI _transitTimeText;
         [SerializeField] private TextMeshProUGUI _raisedObjectText;
-        //[field: SerializeField] public VictoryMenu VictoryPanel { get; private set; }
+
         public Star[] Stars { get; private set; }
 
         private int _currentLevel, _countUnlockLevel;

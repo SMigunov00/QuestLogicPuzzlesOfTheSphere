@@ -1,6 +1,7 @@
 using Runtime.Save;
 using Runtime.SceneObjects;
 using Runtime.Services;
+using Runtime.Services.Pause;
 using UnityEngine;
 using Zenject;
 
@@ -13,7 +14,14 @@ namespace Runtime.Installer
 
         public override void InstallBindings()
         {
+            InitializeGameServicesObject();
             BindGameManagers();
+        }
+
+        private void InitializeGameServicesObject()
+        {
+            _playerMover = FindObjectOfType<PlayerMover>();
+            _levelSetup = FindObjectOfType<LevelSetup>();
         }
 
         private void BindGameManagers()

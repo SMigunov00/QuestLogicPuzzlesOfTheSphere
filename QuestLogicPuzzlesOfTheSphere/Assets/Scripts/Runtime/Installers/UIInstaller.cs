@@ -13,7 +13,15 @@ namespace Runtime.Installer
 
         public override void InstallBindings()
         {
+            InitializeUIObject();
             BindUIElements();
+        }
+
+        private void InitializeUIObject()
+        {
+            _victoryMenu = FindObjectOfType<VictoryMenu>(true);
+            _loseMenu = FindObjectOfType<LoseMenu>(true);
+            _hud = FindObjectOfType<HUD>();
         }
 
         private void BindUIElements()

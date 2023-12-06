@@ -1,4 +1,5 @@
 using Runtime.SceneObjects;
+using Runtime.Services.Pause;
 using System;
 using UnityEngine;
 using Zenject;
@@ -30,8 +31,7 @@ namespace Runtime.Services
             _pauseHandler = pauseHandler;
         }
 
-        private void OnClick(Vector3 position) =>
-          SelectObject(position);
+        private void OnClick(Vector3 position) => SelectObject(position);
 
         private void SelectObject(Vector3 position)
         {

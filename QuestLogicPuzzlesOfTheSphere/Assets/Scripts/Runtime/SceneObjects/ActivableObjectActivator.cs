@@ -1,67 +1,83 @@
-using Runtime.SceneObjects;
-using System.Collections;
+using Runtime.Services.Pause;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Zenject;
 
-public class ActivableObjectActivator : ITickable
+namespace Runtime.SceneObjects
 {
-    private float _lenghtRay = 3f;
-
-    private List<IActivable> _activableObjectList = new List<IActivable>();
-
-    private IActivable _lastActivableObject;
-
-    private Player _player;
-    private PlayerMover _playerMover;
-
-    [Inject]
-    private void Costructor(Player player, PlayerMover playerMover)
+    public class ActivableObjectActivator : ITickable
     {
-        _player = player;
-        _playerMover = playerMover;
-    }
+        public static Action<bool> OnObjectActivates;
 
-    private List<Lane> _lanes = new List<Lane>();
-    private List<ActivablePoint> _activablePoins = new List<ActivablePoint>();
+        private float _lenghtRay = 3f;
 
-    public void Tick()
-    {
-        RaycastHit hit;
-        Ray ray = new Ray(_player.gameObject.transform.position, Vector3.down);
-        bool intersect = Physics.Raycast(ray, out hit, _lenghtRay);
-        if (intersect && _playerMover.Coroutine != null)
+        private IActivable _lastActivableObject;
+
+        private Player _player;
+        private PlayerMover _playerMover;
+        private IPauseHandler _pause;
+
+        private bool _haveObjectActivates = false;
+
+        [Inject]
+        private void Costructor(Player player, PlayerMover playerMover, IPauseHandler pause)
         {
-            IActivable activableObject = hit.collider.gameObject.GetComponent<IActivable>();
-            if (activableObject != null && !activableObject.IsActive && _lastActivableObject != activableObject)
-            {
-                GameObject gameObject = hit.collider.gameObject;
-                if (gameObject.GetComponent<Lane>())
-                    _lanes.Add(gameObject.GetComponent<Lane>());
-                else if (gameObject.GetComponent<ActivablePoint>())
-                    _activablePoins.Add(gameObject.GetComponent<ActivablePoint>());
+            _player = player;
+            _playerMover = playerMover;
+            _pause = pause;
+        }
 
-                _lastActivableObject = activableObject;
-                _activableObjectList.Add(_lastActivableObject);
-                activableObject.ActivateObject();
+        public void Tick()
+        {
+            if (!_pause.IsPaused)
+            {
+                ActivateActivableObject();
+                if (_transparentLaneList != null && _activablePointWithTrasnparentLaneList != null)
+                    _haveObjectActivates = CheckActivatesActivableObjectWithTransparentLane();
             }
         }
-        else if (_playerMover.Coroutine == null && _activablePoins.Count > 0)
+
+        private SelectableObject _lastSelectableObject;
+
+        private void ActivateActivableObject()
         {
-            
-           /*foreach (var point in _activablePoins)
+            RaycastHit hit;
+            Ray ray = new Ray(_player.gameObject.transform.position, Vector3.down);
+            bool intersect = Physics.Raycast(ray, out hit, _lenghtRay);
+            if (intersect && _playerMover.Coroutine != null)
             {
-                foreach (Lane lane in _lanes)
+                IActivable activableObject = hit.collider.GetComponent<IActivable>();
+                if (activableObject != null && _lastActivableObject != activableObject)
                 {
-                    //point.RemoveSelectedObjectAtList(lane);
+                    _lastSelectableObject = hit.collider.GetComponent<SelectableObject>();
+                    if (!activableObject.IsActive)
+                    {
+                        _lastActivableObject = activableObject;
+                        activableObject.ActivateObject();
+                    }
                 }
-            }*/
-           if (_lanes != null)
-               _lanes.Clear();
-           /* if (isDeleted)
+            }
+            if (_playerMover.Coroutine == null && _lastSelectableObject != null && !_haveObjectActivates)
             {
-                _lanes.Clear();
-            }*/
+                _lastSelectableObject?.StopAtSelectedPoint(_player);
+                _lastSelectableObject = null;
+            }
+        }
+
+        private List<ActivablePointWithTransparentPaths> _activablePointWithTrasnparentLaneList = new List<ActivablePointWithTransparentPaths>();
+        private List<TransparentLane> _transparentLaneList = new List<TransparentLane>();
+
+        public void AddPointWithTransparentPaths(ActivablePointWithTransparentPaths point) => _activablePointWithTrasnparentLaneList.Add(point);
+        public void AddTransparentLane(TransparentLane lane) => _transparentLaneList.Add(lane);
+
+        private bool CheckActivatesActivableObjectWithTransparentLane()
+        {
+            if (_activablePointWithTrasnparentLaneList.Any(x => x.ObjectActivates) || _transparentLaneList.Any(x => x.ObjectActivates))
+                return true;
+            else
+                return false;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Runtime.Services.Pause;
+using TMPro;
 using UnityEngine;
 using Zenject;
 
@@ -6,7 +7,6 @@ namespace Runtime.Services
 {
     public class LoseMenu : MonoBehaviour
     {
-        //[field: SerializeField] public LoseMenu LosePanel { get; private set; }
         [SerializeField] private TextMeshProUGUI _reasonLosing;
 
         [Inject] private IPauseHandler _pauseHandler;

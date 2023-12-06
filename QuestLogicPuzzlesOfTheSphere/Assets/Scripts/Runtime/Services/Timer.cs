@@ -1,4 +1,5 @@
 using Runtime.SceneObjects;
+using Runtime.Services.Pause;
 using System;
 using UnityEngine;
 using Zenject;
@@ -15,7 +16,6 @@ namespace Runtime.Services
         private int _seconds, _minutes, _hours;
 
         private Stargazer _stargazer;
-        private HUD _hud;
         private IPauseHandler _pauseHandler;
 
         private Star _star;
@@ -53,7 +53,7 @@ namespace Runtime.Services
             _hours = (int)(CurrentTime / 3600);
 
             HandleTimer();
-        } 
+        }
 
         private void HandleTimer()
         {

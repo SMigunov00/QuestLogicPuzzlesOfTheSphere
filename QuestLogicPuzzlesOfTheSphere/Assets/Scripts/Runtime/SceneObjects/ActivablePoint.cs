@@ -1,62 +1,84 @@
-using System.Collections.Generic;
+using Runtime.Save;
+using Runtime.Services;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
-using Runtime.Services;
-using System.Linq;
 
 namespace Runtime.SceneObjects
 {
     public class ActivablePoint : SelectableObject, IActivable
     {
-        [SerializeField] private int _countDestinations;
         [field: SerializeField] public bool IsStartPoint { get; private set; }
         [SerializeField] private Transform _positionPoint;
-        [SerializeField] private float _maxEnergy = 250f;
-        [SerializeField] private Color _color = Color.white;
+        private int _numberOfPaths;
+        protected float _maxEnergy = 250f;
+        private Color _color = Color.white;
 
         private float _currentEnergy;
-        [SerializeField] private float _deltaStepsUpdateEmission;
+        private float _deltaStepsUpdateEmission;
 
-        private ActivatedPointCounter _activatedPointCounter;
+        protected ActivatedPointCounter _activatedPointCounter;
         private GameState _gameState;
 
+        protected bool _isTransparentLaneBeingActivated;
+
+        public bool ObjectActivates { get; protected set; }
+
+        public override Vector3 GetPointPosition() => _positionPoint.position;
+        public override List<Lane> GetDirections() => _availableDestinations;
+        public override int GetCountFried() => _availableDestinations.Count;
+
         [Inject]
-        private void Constructor(ActivatedPointCounter activatedPointCounter, LevelSetup levellSetup, GameState gameState)
+        private void Constructor(ActivatedPointCounter activatedPointCounter, LevelSetup levelSetup, GameState gameState)
         {
             _activatedPointCounter = activatedPointCounter;
-            _maxEnergy = levellSetup.MaxGlowPower;
-            _color = levellSetup.LevelColor;
+            _color = levelSetup.LevelColor;
             _gameState = gameState;
         }
 
-        public bool IsActive { get; private set; }
+        public bool IsActive { get; protected set; }
 
         private void OnValidate()
         {
-            CalculateCountDestinations();
+            CalculateNumberOfPaths();
             UpdateGlow();
         }
 
         private void Start()
         {
-            CalculateCountDestinations();
+            Tweaker.OnChangeGlowPower += HandleChangeGlowPower;
+            GameSettingsData settingsData = JsonUtility.FromJson<GameSettingsData>(PlayerPrefs.GetString("SavedGameSettingsData"));
+            _maxEnergy = settingsData.MaxGlowPower;
+            CalculateNumberOfPaths();
             UpdateGlow();
+        }
+
+        private void OnDisable()
+        {
+            Tweaker.OnChangeGlowPower -= HandleChangeGlowPower;
+        }
+
+        public void HandleChangeGlowPower(float newEnergy)
+        {
+            _maxEnergy = newEnergy;
+            if (IsActive || IsStartPoint)
+            {
+                _glowPower = 0f;
+                _deltaStepsUpdateEmission = _maxEnergy / _numberOfPaths;
+                UpdateEmissionColor(_deltaStepsUpdateEmission);
+            }
         }
 
         private void UpdateGlow()
         {
-            _deltaStepsUpdateEmission = _maxEnergy / _countDestinations;
+            _deltaStepsUpdateEmission = _maxEnergy / _numberOfPaths;
             if (IsStartPoint)
                 UpdateEmissionColor(_maxEnergy);
             else
                 UpdateEmissionColor(0f);
         }
 
-        public override Vector3 GetPointPosition()
-        {
-            return _positionPoint.position;
-        }
 
         public void ActivateObject()
         {
@@ -76,16 +98,16 @@ namespace Runtime.SceneObjects
             }
         }
 
-        [SerializeField] private float _radiusCheked = 6f;
-        private void CalculateCountDestinations()
+        [SerializeField] protected float _inspectionRadius = 6f;
+        private void CalculateNumberOfPaths()
         {
-            var colliders = Physics.OverlapSphere(transform.position, _radiusCheked, _interactionRaycastMask);
-            _countDestinations = colliders.Length;
+            var lanesCollider = Physics.OverlapSphere(transform.position, _inspectionRadius, _interactionRaycastMask);
+            _numberOfPaths = lanesCollider.Length;
         }
 
 
-        [SerializeField] List<bool> newList = new List<bool>();
-        int j = 0;
+        private List<bool> _laneFlagsList = new List<bool>();
+        private int _numberActivatedPaths = 0;
 
         public override void StopAtSelectedPoint(Player player)
         {
@@ -97,10 +119,10 @@ namespace Runtime.SceneObjects
                 {
                     foreach (var hitCollider in hitColliders)
                     {
-                        Lane lanes = hitCollider.collider.gameObject.GetComponent<Lane>();
-                        if (!_lanes.Contains(lanes))
+                        Lane lane = hitCollider.collider.gameObject.GetComponent<Lane>();
+                        if (!_lanes.Contains(lane))
                         {
-                            _lanes.Add(lanes);
+                            _lanes.Add(lane);
 
                         }
                     }
@@ -116,7 +138,7 @@ namespace Runtime.SceneObjects
                             x++;
                     }
                     if (x > player.CountMovedActivatedLane)
-                        newList.Add(true);
+                        _laneFlagsList.Add(true);
 
                     i++;
                     _lanes.Clear();
@@ -129,30 +151,12 @@ namespace Runtime.SceneObjects
             {
                 i = 0;
                 _positionPoint.Rotate(0, 0, 0);
-                j = newList.Count;
-                if (j >= _countDestinations)
-                    _gameState.GameLose("¬ы встали на точку, из которой нет выхода");
+                _numberActivatedPaths = _laneFlagsList.Count;
+                if (_numberActivatedPaths >= _numberOfPaths)
+                    _gameState.GameLose("ReasonLosingPointWithNoWayOut");
                 else
-                    newList.Clear();
+                    _laneFlagsList.Clear();
             }
-            /* if (_availableDestinations != null)
-             {
-                 _currentEnergy += _deltaStepsUpdateEmission;
-                 if (_currentEnergy < _maxEnergy)
-                     StartCoroutine(UpdateEmission(_currentEnergy));
-                 else
-                     StartCoroutine(UpdateEmission(_maxEnergy));
-                 //lane.ActivateObject();
-                 //RemoveSelectedObjectAtList(lastSelectableObject);
-                 //lastSelectableObject.RemoveSelectedObjectAtList(this);
-                 ActivateObject();
-                 /*if (!IsActive)
-                 {
-                     IsActive = true;
-                     _activatedPointCounter.CalculateActivatedPoint(this);
-                 }*/
-
-
         }
 
         public void RemoveSelectedObjectAtList(Lane lane)
@@ -161,27 +165,23 @@ namespace Runtime.SceneObjects
                 _availableDestinations.Remove(lane);
         }
 
-        public override List<Lane> GetDirections()
-        {
-            return _availableDestinations;
-        }
 
-        public override int GetCountFried()
+        protected float _glowPower;
+
+        protected IEnumerator UpdateEmission(float currentEnergy)
         {
-            return _availableDestinations.Count;
-        }
-        float _glowPower;
-        private IEnumerator UpdateEmission(float currentEnergy)
-        {
+            ObjectActivates = true;
             while (_glowPower <= currentEnergy)
             {
                 _glowPower += 10f;
                 UpdateEmissionColor(_glowPower);
                 yield return null;
             }
+            yield return new WaitForSeconds(0.5f);
+            ObjectActivates = false;
         }
 
-        private void UpdateEmissionColor(float energy)
+        protected void UpdateEmissionColor(float energy)
         {
             float glowPower = energy / 100.0f;
 
@@ -199,7 +199,7 @@ namespace Runtime.SceneObjects
         {
             MaterialPropertyBlock propBlock = new MaterialPropertyBlock();
             element.GetPropertyBlock(propBlock);
-            propBlock.SetColor("_FresnelColor", _color * glowPower);
+            propBlock.SetColor("_FresnelLaneColor", _color * glowPower);
             propBlock.SetColor("_EmissionColor", _color * glowPower);
             element.SetPropertyBlock(propBlock);
         }

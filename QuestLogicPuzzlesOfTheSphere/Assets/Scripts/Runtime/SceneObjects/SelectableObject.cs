@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 namespace Runtime.SceneObjects
 {
@@ -10,12 +9,11 @@ namespace Runtime.SceneObjects
         [SerializeField] protected float _stepRayLenght = 20f;
         [SerializeField] protected float _defaultRayLenght = 3f;
         [SerializeField] protected Transform _raycastPoint;
-
         [SerializeField] protected LayerMask _interactionRaycastMask;
 
         protected float _currentRayLenght;
 
-        [SerializeField] protected List<Lane> _availableDestinations = new List<Lane>();
+        protected List<Lane> _availableDestinations = new List<Lane>();
         protected List<Lane> _lanes = new List<Lane>();
 
         public abstract Vector3 GetPointPosition();
@@ -23,27 +21,29 @@ namespace Runtime.SceneObjects
         public abstract List<Lane> GetDirections();
         public abstract int GetCountFried();
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             _currentRayLenght = _defaultRayLenght;
             FindLaneDirection();
         }
 
         protected int i;
-        bool laneActivated;
-        [SerializeField] protected List<bool> _checkedLanesFlag = new List<bool>();
-        [SerializeField] protected List<Lane> _checkedLanes = new List<Lane>();
+        private bool _laneActivated;
+        protected List<bool> _checkedLanesFlag = new List<bool>();
+        protected List<Lane> _checkedLanes = new List<Lane>();
+
         public bool CheckLaneActivated(Vector3 direction, Player player)
         {
             _raycastPoint.LookAt(direction);
+
             float rayLenght = 0;
             if (player.CountMovedActivatedLane == 0)
                 rayLenght = (transform.position - direction).magnitude;
             else
                 rayLenght = (transform.position - direction).magnitude + _stepRayLenght;
+
             Ray ray = new Ray(transform.position, _raycastPoint.forward);
             var hitColliders = Physics.RaycastAll(ray, rayLenght, _interactionRaycastMask);
-            Debug.Log(hitColliders.Length);
             if (hitColliders.Length > _checkedLanes.Count)
             {
                 foreach (var hitCollider in hitColliders)
@@ -65,15 +65,15 @@ namespace Runtime.SceneObjects
                 }
 
                 if (i <= player.CountMovedActivatedLane)
-                    laneActivated = false;
+                    _laneActivated = false;
                 else
-                    laneActivated = true;
+                    _laneActivated = true;
 
                 _checkedLanes.Clear();
                 _checkedLanesFlag.Clear();
 
             }
-            return laneActivated;
+            return _laneActivated;
         }
 
         protected void FindLaneDirection()

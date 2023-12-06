@@ -1,17 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class PauseSystem :  IPauseHandler
+namespace Runtime.Services.Pause
 {
-    public bool IsPaused { get; private set; }
-
-    public void SetPaused(bool isPaused)
+    public class PauseSystem : IPauseHandler
     {
-        IsPaused = isPaused;
-/*if (isPaused)
-            Time.timeScale = 0f;
-        else
-            Time.timeScale = 1f;*/
+        public bool IsPaused { get; private set; }
+
+        public void SetPaused(bool isPaused)
+        {
+            IsPaused = isPaused;
+        }
     }
 }

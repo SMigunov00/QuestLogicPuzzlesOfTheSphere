@@ -1,4 +1,4 @@
-using Runtime.Services;
+using Runtime.Services.Pause;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -38,7 +38,6 @@ namespace Runtime.SceneObjects
 
         private IEnumerator Move(SelectableObject selectableObject)
         {
-
             Vector3 targetPosition = selectableObject.GetPointPosition();
             yield return StartCoroutine(Rotate(targetPosition));
             while (Player.transform.position != targetPosition)
@@ -51,7 +50,6 @@ namespace Runtime.SceneObjects
                 yield return null;
             }
             Coroutine = null;
-            selectableObject.StopAtSelectedPoint(Player);
         }
 
         private IEnumerator Rotate(Vector3 targetPosition)

@@ -6,7 +6,7 @@ namespace Runtime.Save
     public class GameData
     {
         public int RisedObjectScore;
-        public int CountUnlockedLevel;
+        public int CountUnlockedLevel = 2;
         public List<float> TransitTime = new List<float>();
         public List<int> NumberOfStarsOnALevel = new List<int>();
     }

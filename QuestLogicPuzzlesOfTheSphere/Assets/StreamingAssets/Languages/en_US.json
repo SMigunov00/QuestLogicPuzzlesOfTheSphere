@@ -1,12 +1,120 @@
 {
   "Items": [
     {
-      "Key": "",
-      "Value": ""
+      "Key": "NameGame",
+      "Value": "QuestLogic: Puzzles \n of the Sphere"
     },
     {
-      "Key": "",
-      "Value": ""
+      "Key": "Settings",
+      "Value": "Settings"
+    },
+    {
+      "Key": "Pause",
+      "Value": "Pause"
+    },
+    {
+      "Key": "Victory",
+      "Value": "Victory"
+    },
+    {
+      "Key": "Lose",
+      "Value": "You Lose"
+    },
+    {
+      "Key": "Language",
+      "Value": "Language"
+    },
+    {
+      "Key": "SpeedButtonClick",
+      "Value": "Speed Button Click"
+    },
+    {
+      "Key": "CameraType",
+      "Value": "Orthographic camera type"
+    },
+    {
+      "Key": "GlowPower",
+      "Value": "Glow Power"
+    },
+    {
+      "Key": "Steps",
+      "Value": "Steps:"
+    },
+    {
+      "Key": "StepInformationOnTheUI",
+      "Value": "Steps information on the UI shows two numbers, the first is the number of steps until the star is deactivated, the second is the number of steps until it is lose game. Once the number becomes 0, the next step will result in deactivation star/lose game"
+    },
+    {
+      "Key": "CrystalInformationOnTheUI",
+      "Value": "The crystal information on the UI shows two numbers, the first shows the current number of collected crystals, the second shows the required number of collected crystals to activate the star"
+    },
+    {
+      "Key": "ReasonLosingPointWithNoWayOut",
+      "Value": "You've reached a point from which there is no escape"
+    },
+    {
+      "Key": "ReasonLosingWasTheStepsRanOut",
+      "Value": "You're out of steps"
+    },
+    {
+      "Key": "TapToScreen",
+      "Value": "Tap the screen to continue"
+    },
+    {
+      "Key": "FirstWalkingLesson",
+      "Value": "Click on a point to start moving towards it"
+    },
+    {
+      "Key": "SecondWalkingLesson",
+      "Value": "Attention! Moving is only possible on an unactivated track"
+    },
+    {
+      "Key": "ThirdWalkingLesson",
+      "Value": "Click on a far point to activate multiple points in 1 step"
+    },
+    {
+      "Key": "FourthWalkingLesson",
+      "Value": "You can use one point multiple times if it has unactivated paths"
+    },
+    {
+      "Key": "FirstLessonUsingTeleporter",
+      "Value": "Use the teleporter to get to the other side"
+    },
+    {
+      "Key": "SecondLessonUsingTeleporter",
+      "Value": "Click on the far point to go through the portal"
+    },
+    {
+      "Key": "ThirdLessonUsingTeleporter",
+      "Value": "Attention! Teleport works only if you stand on it"
+    },
+    {
+      "Key": "CrystalPickingInformation",
+      "Value": "Collect crystals that are found on the level. Later on you can use them as game currency"
+    },
+    {
+      "Key": "FirstLessonUsingActivablePointWithTransparentLane",
+      "Value": "A point with transparent lanes is activated after all lanes connected to it become active"
+    },
+    {
+      "Key": "SecondLessonUsingActivablePointWithTransparentLane",
+      "Value": "Activation of the transparent lane takes place after activation of the simple point to which it is connected"
+    },
+    {
+      "Key": "ThirdLessonUsingActivablePointWithTransparentLane",
+      "Value": "Attention! It is not possible to drive on the transparent lanes"
+    },
+    {
+      "Key": "FourthLessonUsingActivablePointWithTransparentLane",
+      "Value": "If the points are connected by a transparent lanes, the lane is activated when at least one of these points is activated"
+    },
+    {
+      "Key": "FirstLessonUsingActivablePointWithoutLane",
+      "Value": "A point without paths is activated after all points with transparent lanes around it become active"
+    },
+    {
+      "Key": "OneTimeBonus",
+      "Value": "Dear player, I would like to express my sincere apologies to you for the deletion of saved data with completed levels, caused by changes in the initial levels. As compensation for the inconvenience, I offer you 10,000 crystals, which you can use in the future at your discretion"
     }
   ]
 }

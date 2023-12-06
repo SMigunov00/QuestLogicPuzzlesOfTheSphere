@@ -58,7 +58,7 @@ namespace Runtime.Services
                     CurrentCountStarsOnTheLevel--;
             }
 
-            if (!_starForRaisedObjects.IsChanged && ((float)_itemPicker.CurrentCountOfItemsRaised / _levelSetup.MaxCountOfItemsRaised >= 0.75f))
+            if (!_starForRaisedObjects.IsChanged && ((_itemPicker.CurrentCountOfItemsRaised == _levelSetup.RequiredNumberOfCollectedObjectsToGetAStar) && _levelSetup.RequiredNumberOfCollectedObjectsToGetAStar > 0))
             {
                 _starForRaisedObjects.ChangeStateStar(true);
                 if (CurrentCountStarsOnTheLevel < 3)

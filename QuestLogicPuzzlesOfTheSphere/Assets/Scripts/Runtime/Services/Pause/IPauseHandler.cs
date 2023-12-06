@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public interface IPauseHandler
+namespace Runtime.Services.Pause
 {
-    public bool IsPaused { get; }
-    public void SetPaused(bool isPaused);
+    public interface IPauseHandler
+    {
+        public bool IsPaused { get; }
+        public void SetPaused(bool isPaused);
+    }
 }

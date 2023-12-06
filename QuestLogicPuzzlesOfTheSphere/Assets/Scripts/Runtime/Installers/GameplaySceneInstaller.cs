@@ -18,10 +18,10 @@ namespace Runtime.Installer
 
         private void InitializeGameplaySceneObject()
         {
-            var activablePoints = FindObjectsOfType(typeof(ActivablePoint));
+            var activablePoints = FindObjectsOfType<ActivablePoint>();
             foreach (var point in activablePoints)
             {
-                if (point.GameObject().gameObject.GetComponent<ActivablePoint>().IsStartPoint)
+                if (point.IsStartPoint)
                     _startPoint = point.GameObject().gameObject.GetComponent<ActivablePoint>();
             }
         }
