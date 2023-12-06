@@ -27,7 +27,7 @@ Material:
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 2
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -55,7 +55,9 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _FresnelColor: {r: 1.0592738, g: 0.36528477, b: 0, a: 1}
+    - _FresnelColor: {r: 1, g: 0.7372549, b: 0, a: 1}
+    - _InMinMax: {r: 0, g: -1, b: 0, a: 0}
     - _InteriorColor: {r: 3.9533498, g: 1.363291, b: 0, a: 1}
     - _InteriorPosition: {r: 0, g: -0.27, b: 0, a: 0}
+    - _OutMinMax: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
