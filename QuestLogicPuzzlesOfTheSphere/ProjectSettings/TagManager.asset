@@ -15,8 +15,8 @@ TagManager:
   - IntetactableObject
   - PickableObject
   - Lane
-  - 
-  - 
+  - PointWithoutPaths
+  - TransparentLane
   - 
   - 
   - 
